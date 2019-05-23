@@ -3,8 +3,8 @@ token=PUT_YOUR_TOKEN_HERE
 id=PUT_YOUR_DISCORD_ID_HERE
 password=PUT_YOUR_DISCORD_PASSWORD_HERE
 
-//the amount of minutes you would like the bot to change its avatar; it will be defaulted to 10 if below 10
+//the amount of minutes you would like the bot to change its avatar; it will be defaulted to 9 if below 9
 //in order to prevent being rate-limited by the Discord API.
 //For the sake of convenience, 1 day is 1440 minutes.
-time_to_switch=10
+time_to_switch=9
 
