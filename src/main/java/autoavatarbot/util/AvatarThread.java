@@ -2,13 +2,13 @@ package autoavatarbot.util;
 
 import net.dv8tion.jda.core.entities.Icon;
 import autoavatarbot.AutoAvatarBot;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,21 +17,23 @@ public class AvatarThread extends Thread{
     private File folder;
     private ArrayList<String> files;
     private List<String> imageExtensions;
-    private int counter;
-    private int index;
+    private Random rand;
 
-    public AvatarThread(long period) {
+    public AvatarThread() {
         folder = new File("assets/images/");
         files = new ArrayList<>();
         imageExtensions = Arrays.asList("jpg", "jpeg", "png");
-        counter = Objects.requireNonNull(folder.listFiles()).length;
-        index = 0;
-        executeThread(period);
+        rand = new Random();
+        executeThread();
     }
 
-    public void executeThread(long period) {
+    /**
+     * Runs a thread to change the avatar at a time interval determined by the timeToSwitch value present
+     * in AutoAvatarBot.java from the config file.
+     */
+    public void executeThread() {
         try {
-            counter = Objects.requireNonNull(folder.listFiles()).length;
+            //
             for(File file : Objects.requireNonNull(folder.listFiles())) {
                 for (String imageExtension : imageExtensions) {
                     if (file.getName().contains(imageExtension)) {
@@ -44,21 +46,18 @@ public class AvatarThread extends Thread{
                 @Override
                 public void run() {
                     try {
+                        int index = rand.nextInt(files.size());
                         File avatar = new File(files.get(index));
                         System.out.println("Changed avatar to " + avatar.getName());
+                        //logins into Discord via the API, and then sends a request to change the avatar
                         AutoAvatarBot.getJda().getSelfUser().getManager()
                                 .setAvatar(Icon.from(avatar), AutoAvatarBot.getPassword()).queue();
-                        if(index == counter) {
-                            index = 0;
-                        } else {
-                            ++index;
-                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             };
-            timer.schedule(changeAvatarTask, 100, 1000 * 60 * period);
+            timer.schedule(changeAvatarTask, 100, 1000 * 60 * AutoAvatarBot.getTimeToSwitch());
         } catch (NullPointerException e) {
             e.printStackTrace();
             this.interrupt();
