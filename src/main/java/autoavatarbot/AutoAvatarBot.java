@@ -13,13 +13,16 @@ public class AutoAvatarBot {
     private static String password;
     private static long timeToSwitch;
 
+    /**
+     * logs into the account and starts the thread
+     */
     public AutoAvatarBot() {
         config = new LoadingProperties();
         password = config.getPassword();
         timeToSwitch = config.getTimeToSwitch();
         try {
-            jda = new JDABuilder(AccountType.CLIENT).setToken(config.getToken()).buildBlocking();
-            new Avatar(timeToSwitch);
+            jda = new JDABuilder(AccountType.CLIENT).setToken(config.getToken()).build().awaitReady();
+            new Avatar();
             System.out.println("Launched!");
         } catch (LoginException | InterruptedException e) {
             System.out.println("invalid token");
@@ -35,11 +38,11 @@ public class AutoAvatarBot {
         return jda;
     }
 
-    public static LoadingProperties getConfig() {
-        return config;
-    }
-
     public static String getPassword() {
         return password;
+    }
+
+    public static long getTimeToSwitch() {
+        return timeToSwitch;
     }
 }
