@@ -1,0 +1,1 @@
+worker: java -jar build/libs/autoavatarbot-1.0-all.jar
