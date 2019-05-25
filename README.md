@@ -29,4 +29,4 @@ Currently, the only tested file extensions for images are only .png,
 for.
 
 Adding new images into assets/images will require the bot's current
-thread to be restarted, or the bot itself in order to accommodate them. 
+thread to be interrupted, or the bot itself in order to accommodate them. 
